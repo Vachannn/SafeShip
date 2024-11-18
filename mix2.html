@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeShip - Service Check</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+.navbar {
+    background-color: #f5f5f5;  /* Light gray background */
+    border-bottom: 2px solid #007bff;  /* Blue bottom border */
+}
+
+
+.navbar-brand {
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000; /* Black color */
+    cursor: pointer;
+    }
+
+.navbar-brand:hover {
+    color: #007bff; /* Blue hover color */
+}
+
+
+
+.cart-item {
+      font-weight: bold;
+    }
+
+    .hidden-section {
+      display: none;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .remove-item-btn {
+      color: red;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .remove-item-btn:hover {
+      font-weight: bold;
+    }
+
+    .special-care {
+      margin-top: 15px;
+    }
+
+    .special-care input[type="text"] {
+      margin-top: 10px;
+      display: none;
+    }
+
+
+
+
+
+
+   /* Styling for the location details section */
+    .location-details-section {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
+
+    /* Styling for the buttons */
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 10px 0;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    /* Styling for the dropdown inputs */
+    select {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+        width: 200px;
+    }
+
+    /* Additional styling for labels */
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+    }
+
+    /* Styling for the location details button specifically */
+    #locationDetailsButton {
+        background-color: #2196F3;
+    }
+
+    #locationDetailsButton:hover {
+        background-color: #1976D2;
+    }
+
+    /* Styling for the submit button */
+    #submitButton {
+        background-color: #FF9800;
+    }
+
+    #submitButton:hover {
+        background-color: #FB8C00;
+    }
+
+    /* Styling for the confirmation message */
+    #confirmationMessage {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #4CAF50;
+        background-color: #E8F5E9;
+    }
+
+  .reviews-section {
+        margin: 50px auto;
+        width: 80%;
+        max-width: 900px;
+        text-align: center;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .reviews-section h2, .reviews-section h3 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .reviews-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .review-card {
+        background-color: white;
+        border-radius: 8px;
+        padding: 15px;
+        width: 45%;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+ .review-card p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .review-card h4 {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #007bff;
+    }
+
+    .add-review {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .add-review input, .add-review textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .add-review button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .add-review button:hover {
+        background-color: #218838;
+    }
+
+    .acknowledgement {
+        margin-top: 10px;
+        color: green;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        .review-card {
+            width: 100%;
+        }
+    }
+
+
+/* Basic Styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Form Heading */
+h2, h3 {
+  color: #0056b3;
+}
+
+/* Form Layout */
+form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Labels */
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Dropdown Styling */
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Buttons */
+button {
+  background-color: #0056b3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #004099;
+}
+
+/* Cart Section */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #e9ecef;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+/* Special Care Section */
+.special-care {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+/* Suggested Vehicle Section */
+#vehicleSuggestion {
+  padding: 10px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Result Message */
+#result {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  form, .mt-4 {
+    width: 100%;
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+
+
+</style>
+</head>
+<body>
+
+<!-- Navbar Section -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#" onclick="showSection('homeSection')">SafeShip</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#" onclick="showSection('homeSection')">Home</a>
+          </li>
+        </ul>
+        <!-- Buttons to navigate to different sections -->
+        <div class="d-flex">
+          <button class="btn btn-outline-primary me-2" onclick="showSection('loginSection')">Login</button>
+         
+          <button class="btn btn-secondary me-2" onclick="showSection('vehicleOwnerSignupSection')">Vehicle Owner Signup</button>
+                  </div>
+      </div>
+    </div>
+  </nav>
+
+
+<!-- Main Content Area -->
+  <div class="container mt-5">
+    <!-- Home Section -->
+    <div id="homeSection" class="text-center mb-5">
+      <h1>Welcome to SafeShip</h1>
+      <p>Your reliable partner for moving services. Sign up or log in below.</p>
+    </div>
+
+
+<!-- Login Section -->
+<div id="loginSection" class="hidden-section">
+    <div class="form-container">
+        <h2 class="form-title">Login</h2>
+        <form id="loginForm" method="POST" action="login.php"> <!-- Add action here -->
+            <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="loginEmail" name="loginEmail" required> <!-- Added name attribute -->
+            </div>
+            <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="loginPassword" name="loginPassword" required> <!-- Added name attribute -->
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <p>Do Not Have an Account?</p>
+            <a href="#" onclick="showSection('customerSignupSection')">Signup</a>
+        </form>
+    </div>
+</div>
+
+<!-- Customer Signup Section -->
+<div id="customerSignupSection" class="hidden-section">
+    <div class="form-container">
+        <h2 class="form-title">Customer Signup</h2>
+        <form id="customerSignupForm" method="POST" action="signup.php"> <!-- Add action here -->
+            <div class="mb-3">
+                <label for="customerName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="customerName" name="customerName" required> <!-- Added name attribute -->
+            </div>
+            <div class="mb-3">
+                <label for="customerEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="customerEmail" name="customerEmail" required> <!-- Added name attribute -->
+            </div>
+            <div class="mb-3">
+                <label for="customerPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="customerPassword" name="customerPassword" required> <!-- Added name attribute -->
+            </div>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+        <div id="acknowledgementMessage" class="mt-3 text-success" style="display: none;"></div>
+    </div>
+</div>
+
+   <!-- Vehicle Owner Signup Section -->
+<div id="vehicleOwnerSignupSection" class="hidden-section">
+  <div class="form-container">
+    <h2 class="form-title">Vehicle Owner Signup</h2>
+    <form id="vehicleOwnerSignupForm" onsubmit="handleFormSubmit(event)">
+      <div class="mb-3">
+        <label for="ownerName" class="form-label">Name</label>
+        <input type="text" class="form-control" id="ownerName" required>
+      </div>
+      <div class="mb-3">
+        <label for="ownerMobile" class="form-label">Mobile Number</label>
+        <input type="tel" class="form-control" id="ownerMobile" required>
+      </div>
+      <div class="mb-3">
+        <label for="vehicleModel" class="form-label">Vehicle Model</label>
+        <input type="text" class="form-control" id="vehicleModel" required>
+      </div>
+      <div class="mb-3">
+        <label for="numberPlate" class="form-label">Number Plate</label>
+        <input type="text" class="form-control" id="numberPlate" required>
+      </div>
+      <div class="mb-3">
+        <label for="servicelocation" class="form-label">Service Location</label>
+        <input type="text" class="form-control" id="servicelocation " required>
+      </div>
+      <div class="mb-3">
+        <label for="registrationDate" class="form-label">Registration Date</label>
+        <input type="date" class="form-control" id="registrationDate" required>
+      </div>
+      <div class="mb-3">
+        <label for="timeRange" class="form-label">Available Time Range</label>
+        <input type="text" class="form-control" id="timeRange" placeholder="e.g., 9:00 AM - 5:00 PM" required>
+      </div>
+      <button type="submit" class="btn btn-secondary">Submit</button>
+
+<button type="button" class="btn btn-primary" onclick="checkAvailableVehicles()">Check Available Vehicles</button>
+    </form>
+<div id="vehicleDataDisplay" class="mt-3" style="display: none;">
+      <h4>Registered Vehicle Details:</h4>
+      <p id="vehicleDetails"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Services We Offer Section -->
+    <div id="servicesSection" class="container service-section text-center">
+      <h2 class="mb-4">Services We Offer</h2>
+      <div class="row justify-content-center">
+        <!-- Service 1: Within Cities -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="C:\Users\tirun\OneDrive\Desktop\safeshipimgs\img2.jpeg" alt="Within Cities Logo">
+            <h4>Within Cities</h4>
+            <p>Efficient transportation of goods within your city, ensuring timely and safe deliveries.</p>
+          </div>
+        </div>
+        <!-- Service 2: Between Cities -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="C:\Users\tirun\OneDrive\Desktop\safeshipimgs\between_cities.jpeg" alt="Between Cities Logo">
+            <h4>Between Cities</h4>
+            <p>Reliable inter-city goods transportation for long-distance moving needs.</p>
+          </div>
+        </div>
+        <!-- Service 3: Vehicle Shifting -->
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="C:\Users\tirun\OneDrive\Desktop\safeshipimgs\vehicle_shifting.jpeg" alt="Vehicle Shifting Logo">
+            <h4>Vehicle Shifting</h4>
+            <p>We help you safely transport your vehicles across cities with our trusted network.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<div class="container">
+    <h2>Check Service Availability</h2>
+    
+    <form id="locationForm">
+      <label for="pickup">Select Pickup Location:</label>
+      <select id="pickup" required>
+        <option value="" disabled selected>Select a location</option>
+        <option value="Medchal">Medchal</option>
+        <option value="Secunderabad">Secunderabad</option>
+        <option value="Miyapur">Miyapur</option>
+        <option value="Lingampalli">Lingampalli</option>
+        <option value="Musheerabad">Musheerabad</option>
+        <option value="Uppal">Uppal</option>
+        <option value="Dilsukhnagar">Dilsukhnagar</option>
+        <option value="Karimnagar">Karimnagar</option>
+        <option value="Warangal">Warangal</option>
+      </select>
+      
+      <label for="drop">Select Drop Location:</label>
+      <select id="drop" required>
+        <option value="" disabled selected>Select a location</option>
+        <option value="Medchal">Medchal</option>
+        <option value="Secunderabad">Secunderabad</option>
+        <option value="Miyapur">Miyapur</option>
+        <option value="Lingampalli">Lingampalli</option>
+        <option value="Musheerabad">Musheerabad</option>
+        <option value="Uppal">Uppal</option>
+        <option value="Dilsukhnagar">Dilsukhnagar</option>
+        <option value="Karimnagar">Karimnagar</option>
+        <option value="Warangal">Warangal</option>
+      </select>
+      
+      <button type="button" onclick="calculateFuellabourFare()">Submit</button>
+    </form>
+    
+    <p id="result"></p>
+  </div>
+
+
+<!-- Category Dropdown -->
+  <div class="mb-3">
+    <label for="categoryDropdown" class="form-label">Select Category</label>
+    <select id="categoryDropdown" class="form-select" onchange="showSubItems()">
+      <option value="">-- Select Category --</option>
+      <option value="furniture">Furniture</option>
+      <option value="electronics">Electronics</option>
+      <option value="utilities">Utilities</option>
+      <option value="appliances">Appliances</option>
+      <option value="outdoor">Outdoor</option>
+      <option value="tools">Tools</option>
+    </select>
+  </div>
+
+  <!-- Item Dropdown -->
+  <div id="itemDropdownContainer" class="mb-3" style="display:none;">
+    <label for="itemDropdown" class="form-label">Select Item</label>
+    <select id="itemDropdown" class="form-select" onchange="showItemOptions()">
+      <option value="">-- Select Item --</option>
+    </select>
+  </div>
+
+  <!-- Item Options Dropdown -->
+  <div id="itemOptionsContainer" class="mb-3" style="display:none;">
+    <label for="itemOptionsDropdown" class="form-label">Select Option</label>
+    <select id="itemOptionsDropdown" class="form-select">
+      <option value="">-- Select Option --</option>
+    </select>
+    <button class="btn btn-primary mt-3" onclick="addToCart()">Add to Cart</button>
+  </div>
+
+  <!-- Cart Section -->
+  <div class="mt-4">
+    <h3>Selected Items</h3>
+    <ul id="cartList" class="list-group"></ul>
+  </div>
+
+  <!-- Special Care Section -->
+  <div class="special-care mt-4">
+    <input type="checkbox" id="specialCareCheckbox" onchange="toggleSpecialCareInput()"> I have items that require special care (e.g., glass items)
+    <input type="text" id="specialCareInput" class="form-control mt-2" placeholder="Please specify special care items..." style="display:none;">
+  </div>
+
+  <!-- Suggested Vehicle Section -->
+  <div class="mt-4">
+    <h3>Suggested Vehicle</h3>
+    <p id="vehicleSuggestion"></p>
+  </div>
+
+<!-- Customer Reviews Section -->
+<div class="reviews-section">
+    <h2>Customer Reviews</h2>
+
+    <div class="reviews-container" id="reviews-container">
+        <!-- Existing Reviews -->
+        <div class="review-card">
+            <p>"SafeShip has been an absolute lifesaver! The booking process is simple, and the service is reliable."</p>
+            <h4>- Ramesh, Hyderabad</h4>
+        </div>
+
+        <div class="review-card">
+            <p>"I had a great experience using SafeShip to move my furniture. The prices are fair, and the service is excellent."</p>
+            <h4>- Priya, Karimnagar</h4>
+        </div>
+
+        <div class="review-card">
+            <p>"Booking a vehicle for transporting goods has never been this easy. SafeShip made the process smooth and hassle-free."</p>
+            <h4>- Rajesh, Warangal</h4>
+        </div>
+
+        <div class="review-card">
+            <p>"Excellent customer support and fast response times. Will definitely use SafeShip again."</p>
+            <h4>- Anjali, Secunderabad</h4>
+        </div>
+    </div>
+
+    <!-- Form to Add New Review -->
+    <div class="add-review">
+        <h3>Write Your Review</h3>
+        <input type="text" id="reviewer-name" placeholder="Your Name" required>
+        <input type="text" id="reviewer-location" placeholder="Your Location" required>
+        <textarea id="review-text" placeholder="Your Review" rows="4" required></textarea>
+        <button onclick="submitReview()">Submit Review</button>
+        <p id="acknowledgement" style="color: green; font-weight: bold;"></p>
+    </div>
+</div>
+
+
+
+<script>
+
+const sections = {
+      homeSection: document.getElementById('homeSection'),
+      loginSection: document.getElementById('loginSection'),
+      customerSignupSection: document.getElementById('customerSignupSection'),
+      vehicleOwnerSignupSection: document.getElementById('vehicleOwnerSignupSection'),
+      
+    };
+
+
+function showLocationDetails() {
+    document.getElementById('locationInputs').style.display = 'block';
+}
+
+ function handleFormSubmit(event) {
+    event.preventDefault(); // Prevent form submission
+    alert("Registered successfully!"); // Acknowledge successful registration
+    document.getElementById("vehicleOwnerSignupForm").reset(); // Reset the form
+  }
+
+ const registeredVehicles = []; // Array to store multiple registered vehicle details
+
+  function handleFormSubmit(event) {
+    event.preventDefault(); // Prevent form submission
+    // Create an object for the new vehicle owner data
+    const newVehicleOwner = {
+      ownerName: document.getElementById("ownerName").value,
+      ownerMobile: document.getElementById("ownerMobile").value,
+      vehicleModel: document.getElementById("vehicleModel").value,
+      numberPlate: document.getElementById("numberPlate").value,
+      registrationDate: document.getElementById("registrationDate").value,
+      timeRange: document.getElementById("timeRange").value,
+    };
+    
+    registeredVehicles.push(newVehicleOwner); // Add the new entry to the array
+
+    const acknowledgementDiv = document.getElementById("acknowledgementMessage");
+    acknowledgementDiv.innerHTML = "Registered successfully!"; // Acknowledge successful registration
+    acknowledgementDiv.style.display = "block"; // Show the message
+    document.getElementById("vehicleOwnerSignupForm").reset(); // Reset the form
+  }
+
+  function checkAvailableVehicles() {
+    const vehicleDataDisplay = document.getElementById("vehicleDataDisplay");
+    const vehicleDetails = document.getElementById("vehicleDetails");
+
+    // Clear previous vehicle details
+    vehicleDetails.innerHTML = "";
+
+    // Check if any vehicles are registered
+    if (registeredVehicles.length === 0) {
+      vehicleDetails.innerHTML = "<p>No vehicles registered yet!</p>";
+      vehicleDataDisplay.style.display = "block"; // Show the vehicle data display
+      return;
+    }
+
+    // Structure the display of all registered vehicles
+    registeredVehicles.forEach((vehicle, index) => {
+      vehicleDetails.innerHTML += `
+        <div class="border p-3 mb-2">
+          <h5>Owner ${index + 1}:</h5>
+          <p><strong>Name:</strong> ${vehicle.ownerName}</p>
+          <p><strong>Mobile Number:</strong> ${vehicle.ownerMobile}</p>
+          <p><strong>Vehicle Model:</strong> ${vehicle.vehicleModel}</p>
+          <p><strong>Number Plate:</strong> ${vehicle.numberPlate}</p>
+          <p><strong>Registration Date:</strong> ${vehicle.registrationDate}</p>
+          <p><strong>Available Time Range:</strong> ${vehicle.timeRange}</p>
+        </div>
+      `;
+    });
+
+    vehicleDataDisplay.style.display = "block"; // Show the vehicle data display
+  } 
+
+
+// JavaScript for calculating the fare
+    function calculateFuellabourFare() {
+      const pickup = document.getElementById('pickup').value;
+      const drop = document.getElementById('drop').value;
+
+      // Distance data in km (you can replace with actual data)
+      const distances = {
+        'Medchal-Secunderabad': 30,
+        'Medchal-Miyapur': 20,
+        'Medchal-Lingampalli': 25,
+        'Medchal-Musheerabad': 40,
+        'Medchal-Uppal': 35,
+        'Medchal-Dilsukhnagar': 45,
+        'Medchal-Karimnagar': 150,
+        'Medchal-Warangal': 180,
+        // Add more locations here as necessary
+      };
+
+      // Define base rates
+      const fuelRatePerKm = 10;  // Fuel cost per kilometer
+      const laborFee = 50;       // Flat labor fee
+
+      // Get the key for the distance between pickup and drop location
+      const key = `${pickup}-${drop}` || `${drop}-${pickup}`;
+
+      // Calculate distance, fuel cost, and labor fee
+      const distance = distances[key] || 0;
+      const fuelCost = distance * fuelRatePerKm;
+      const totalCost = fuelCost + laborFee;
+
+      // Display the result
+      const result = document.getElementById('result');
+      if (distance > 0) {
+        result.innerHTML = `The distance between ${pickup} and ${drop} is ${distance} km. <br>
+                            Fuel cost: ₹${fuelCost} <br>
+                            Labor fee: ₹${laborFee} <br>
+                            <strong>Total Fuel & Labour cost: ₹${totalCost}</strong>`;
+      } else {
+        result.innerHTML = 'Service is not available for the selected locations.';
+      }
+    }
+
+function showSection(sectionId) {
+      Object.values(sections).forEach(section => {
+        section.style.display = 'none';
+      });
+      sections[sectionId].style.display = 'block';
+    }
+
+    const items = {
+    furniture: {
+      Sofa: ['3 seater', '1 seater', 'L-shaped'],
+      'Dining table': ['4 seater', '6 seater'],
+      Wardrobe: ['2-door', '3-door']
+    },
+    electronics: {
+      TV: ['32 inch', '42 inch', '50 inch'],
+      'Washing Machine': ['Front Load', 'Top Load']
+    },
+    utilities: {
+      Bed: ['Single', 'Double', 'King'],
+      Chair: ['Office', 'Plastic']
+    },
+    appliances: {
+      Dishwasher: ['Portable', 'Built-in'],
+      Refrigerator: ['Single Door', 'Double Door']
+    },
+    outdoor: {
+      Grill: ['Charcoal', 'Gas', 'Electric'],
+      'Lawn Mower': ['Electric', 'Gas-powered']
+    },
+    tools: {
+      Drill: ['Cordless', 'Hammer'],
+      Saw: ['Circular', 'Hand']
+    }
+  };
+
+  const vehicles = [
+    { name: "Tata Ace", capacity: 5, baseFare: 500 }, // Small capacity vehicle
+    { name: "Mahindra Bolero Pickup", capacity: 10, baseFare: 1000 }, // Medium capacity
+    { name: "Ashok Leyland Dost", capacity: 20, baseFare: 1500 }, // Large capacity
+    { name: "Tata 407", capacity: 40, baseFare: 2500 } // Extra-large capacity
+  ];
+
+  let cart = [];
+  let totalItems = 0;
+
+  function showSubItems() {
+    const category = document.getElementById('categoryDropdown').value;
+    const itemDropdown = document.getElementById('itemDropdown');
+    const itemDropdownContainer = document.getElementById('itemDropdownContainer');
+
+    itemDropdown.innerHTML = '<option value="">-- Select Item --</option>';
+    if (category && items[category]) {
+      Object.keys(items[category]).forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        itemDropdown.appendChild(option);
+      });
+      itemDropdownContainer.style.display = 'block';
+    } else {
+      itemDropdownContainer.style.display = 'none';
+      document.getElementById('itemOptionsContainer').style.display = 'none';
+    }
+  }
+
+  function showItemOptions() {
+    const category = document.getElementById('categoryDropdown').value;
+    const item = document.getElementById('itemDropdown').value;
+    const itemOptionsDropdown = document.getElementById('itemOptionsDropdown');
+    const itemOptionsContainer = document.getElementById('itemOptionsContainer');
+
+    itemOptionsDropdown.innerHTML = '<option value="">-- Select Option --</option>';
+    if (category && item && items[category][item]) {
+      items[category][item].forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        itemOptionsDropdown.appendChild(optionElement);
+      });
+      itemOptionsContainer.style.display = 'block';
+    } else {
+      itemOptionsContainer.style.display = 'none';
+    }
+  }
+
+  function addToCart() {
+    const category = document.getElementById('categoryDropdown').value;
+    const item = document.getElementById('itemDropdown').value;
+    const option = document.getElementById('itemOptionsDropdown').value;
+
+    if (category && item && option) {
+      const cartItem = { category, item, option };
+      cart.push(cartItem);
+      totalItems++;
+
+      renderCart();
+
+      suggestVehicle(); // Suggest vehicle after adding item to cart
+    }
+  }
+
+function renderCart() {
+    const cartList = document.getElementById('cartList');
+    cartList.innerHTML = ''; // Clear the cart list before re-rendering
+
+    cart.forEach((cartItem, index) => {
+      const listItem = document.createElement('li');
+      listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+      listItem.textContent = `${cartItem.item} (${cartItem.option})`;
+
+      // Add a remove button for each item
+      const removeButton = document.createElement('button');
+      removeButton.className = 'btn btn-danger btn-sm';
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = () => removeFromCart(index);
+
+      listItem.appendChild(removeButton);
+      cartList.appendChild(listItem);
+    });
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1); // Remove item from cart
+    totalItems--;
+
+    renderCart(); // Re-render the cart
+    suggestVehicle(); // Update vehicle suggestion based on updated cart
+  }
+
+
+  function suggestVehicle() {
+    let suggestedVehicle = vehicles[0]; // Default to smallest vehicle
+    for (let vehicle of vehicles) {
+      if (totalItems <= vehicle.capacity) {
+        suggestedVehicle = vehicle;
+        break;
+      }
+    }
+
+    // Display vehicle suggestion
+    document.getElementById('vehicleSuggestion').textContent = `${suggestedVehicle.name} (Capacity: ${suggestedVehicle.capacity} items, Base Fare: ${suggestedVehicle.baseFare} INR)`;
+
+    // Calculate total fare
+    const fuelCost = 1000; // Example fuel cost, you can calculate based on distance
+    const totalFare = suggestedVehicle.baseFare + fuelCost;
+    document.getElementById('totalFare').textContent = `${totalFare} INR`;
+  }
+
+  function toggleSpecialCareInput() {
+    const specialCareCheckbox = document.getElementById('specialCareCheckbox');
+    const specialCareInput = document.getElementById('specialCareInput');
+    if (specialCareCheckbox.checked) {
+      specialCareInput.style.display = 'block';
+    } else {
+      specialCareInput.style.display = 'none';
+    }
+  }
+
+function submitReview() {
+        const name = document.getElementById('reviewer-name').value;
+        const location = document.getElementById('reviewer-location').value;
+        const reviewText = document.getElementById('review-text').value;
+
+        if (name && location && reviewText) {
+            // Create new review element
+            const newReview = document.createElement('div');
+            newReview.className = 'review-card';
+            newReview.innerHTML = `
+                <p>"${reviewText}"</p>
+                <h4>- ${name}, ${location}</h4>
+            `;
+
+            // Add the new review to the reviews container
+            const reviewsContainer = document.getElementById('reviews-container');
+            reviewsContainer.appendChild(newReview);
+
+            // Show acknowledgement
+            const acknowledgement = document.getElementById('acknowledgement');
+            acknowledgement.textContent = 'Thank you for your review!';
+
+            // Clear form fields after submission
+            document.getElementById('reviewer-name').value = '';
+            document.getElementById('reviewer-location').value = '';
+            document.getElementById('review-text').value = '';
+        } else {
+            // Show error message if form is incomplete
+            const acknowledgement = document.getElementById('acknowledgement');
+            acknowledgement.textContent = 'Please fill out all fields before submitting.';
+            acknowledgement.style.color = 'red';
+        }
+    }
+
+
+
+</script>
+</body>
+</html>
